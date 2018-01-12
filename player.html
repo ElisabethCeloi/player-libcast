@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Single player</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- The Libcast JavaScript lib must be included -->
+    <script type="text/javascript" src="libcast_player_client.js"></script>
+</head>
+
+<body>
+<div id="player">
+
+    <iframe id="player" src="//knetwork.libcast.com/widget/test_video-mp4-2#autoplay;hide-controls;" class="libcast_player" width="640" height="360" frameborder="0" scrolling="no" allowfullscreen></iframe>
+
+
+    <script type="text/javascript">
+        var playlist = [
+            "//knetwork.libcast.com/widget/test_video-mp4-2",
+            "//knetwork.libcast.com/widget/170929_total_chat_30s_def_fluvore-mp4",
+            "//knetwork.libcast.com/widget/30s_chat_mix_180311_fluvore-mp4",
+            "//knetwork.libcast.com/widget/1h_de_vie_de_chat_en_30s_fluvore-mp4"
+
+        ];
+        $(document).ready(function(){
+
+            // Get the iframe element that correspond to the Libcast embed
+            window.libcastEmbed = document.getElementsByClassName('libcast_player')[0];
+
+            // Enrich the Libcast <iframe> with methods and attributes
+            var player = new LibcastPlayer(libcastEmbed, function (p) {
+                p.play();
+
+            });
+            var playing = playlist[0];
+
+            player.onended = function () {
+
+                var index = playlist.indexOf(playing) + 1;
+                if(index == playlist.length){
+                    index = 0;
+                }
+
+                    player.src = playlist[index]+'#autoplay;api';
+                    playing = playlist[index];
+                    //display(ind_next)
+                    player.play();
+
+                alert('fini');
+                // //$("#player").attr("src", 'https://knetwork.libcast.com/widget/170929_total_chat_30s_def_fluvore-mp4#autoplay;hide-controls;chromeless');
+                // //iFrame.load('https://knetwork.libcast.com/widget/170929_total_chat_30s_def_fluvore-mp4#autoplay;hide-controls;chromeless');
+                // player.src = '//knetwork.libcast.com/widget/170929_total_chat_30s_def_fluvore-mp4#hide-controls;chromeless';
+                // //
+                // // //player.load(player);
+                // //iFrame.attr('src', '//knetwork.libcast.com/widget/170929_total_chat_30s_def_fluvore-mp4#hide-controls;chromeless');
+                //player.play();
+                logEvent("ended");
+            };
+        });
+    </script>
+</div>
+
+<!-- Set player controls (eg. buttons) -->
+<!--<ul>-->
+<!--    <li><button onclick="libcastEmbed.play()">play</button></li>-->
+<!--    <li><button onclick="libcastEmbed.pause()">pause</button></li>-->
+<!--    <li><button onclick="libcastEmbed.toggle()">toggle play/pause</button></li>-->
+<!--    <li><button onclick="libcastEmbed.seek(10)">seek 10th second</button></li>-->
+<!--    <li><button onclick="libcastEmbed.chapter(2)">seek chapter two</button></li>-->
+<!--    <li><button onclick="libcastEmbed.mute()">mute</button></li>-->
+<!--    <li><button onclick="libcastEmbed.setVolume(.5)">set volume to 50%</button></li>-->
+<!--</ul>-->
+
+<p id="duration"></p>
+<pre id="events"></pre>
+
+<script type="text/javascript">
+    /********
+     /**
+     /**    Somme helpers for the demo (please ignore)
+     /**
+     /**/   window.logEvent = function (message) {
+        /**/       document.getElementById('events').innerHTML = message
+            /**/               + "\n"
+            /**/               + document.getElementById('events').innerHTML;
+        /**/   };
+    /**/   window.listLogs = function () {
+        /**/       return document.getElementById('events').innerHTML;
+        /**/   };
+    /**
+     /********/
+</script>
+</body>
+</html>
